@@ -408,9 +408,8 @@ ElevatedButton(
 จากนั้นรันแอป กดปุ่มนี้ แล้วดูผลลัพธ์ใน Debug Console (ปุ่มนี้เป็นแค่ปุ่มทดลองชั่วคราว ไม่ต้องมีการจัดการ Loading/Error ใด ๆ ต่างจากปุ่ม "ค้นหา" หลักของหน้า)
 
 > ✅ **Checkpoint 3.1** ถ่ายภาพหน้าจอ Debug Console ที่แสดง Status Code (ควรเป็น `201 Created`) พร้อม Response Body 
-```text
-บันทึกรูปและคำตอบที่นี่
-```
+<img width="1891" height="1143" alt="image" src="https://github.com/user-attachments/assets/b5237811-6193-47fa-8cfa-7f0cfc84533f" />
+
 
 ### ขั้นตอนที่ 3.2 — 🧠 คิดเอง/ออกแบบเอง
 
@@ -434,10 +433,8 @@ Future<void> updateDemoPost() async {
 ```
 
 > ✅ **Checkpoint 3.2** ถ่ายภาพหน้าจอ Debug Console ที่แสดง Status Code ของการเรียก PUT (ควรเป็น `200 OK`) 
+<img width="1900" height="1128" alt="image" src="https://github.com/user-attachments/assets/bd72d38a-ceb1-481f-8be2-3750ee6e12da" />
 
-```text
-บันทึกรูปและคำตอบที่นี่
-```
 ---
 
 ## ส่วนที่ 4: ใช้ AI ช่วย Generate โค้ด API Client
@@ -490,9 +487,8 @@ GET https://fakestoreapi.com/products
 ```
 
 > ✅ **Checkpoint 4.2** ถ่ายภาพหน้าจอ Debug Console ที่แสดงผลลัพธ์จริงจากการเรียก `fetchAiProducts()` (เช่น รายการสินค้าที่ print ออกมา) 
-```text
-บันทึกรูปที่นี่
-```
+<img width="1905" height="1122" alt="image" src="https://github.com/user-attachments/assets/33929b87-2a18-49d6-9b80-9e6a29a2b0d4" />
+
 
 ---
 
@@ -551,9 +547,8 @@ Future<Weather> fetchWeatherWithDio(String city) async {
 2. รูปแบบการเขียน query parameters (`queryParameters: {...}`) ต่างจากการต่อ string URL เองแบบที่ทำใน `WeatherService` (ขั้นตอนที่ 2.3) 
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Debug Console ที่แสดงผลลัพธ์จริงจากการเรียก `fetchWeatherWithDio()` (ค่าทั้ง 4 ฟิลด์ของ `Weather` ที่ print ออกมา หรือแสดงผลบนหน้าจอถ้าเลือกแบบที่ 2)
-```text
-บันทึกรูปที่นี่
-```
+<img width="1911" height="1132" alt="image" src="https://github.com/user-attachments/assets/9cb03bd5-a6b9-470f-807a-95d6800dad7c" />
+
 ### ขั้นตอนที่ 5.4 — 🧠 คิดเอง/ออกแบบเอง
 
 `DioException` มีหลายชนิด (`DioExceptionType`) แต่โค้ดในขั้นตอนที่ 5.2 จัดการเฉพาะ `connectionTimeout` ด้านล่างเป็นตัวอย่างการเพิ่มเงื่อนไขให้อีก 1 ชนิด (`badResponse`) ให้ดูเป็นแนวทาง จากนั้นให้เพิ่มเงื่อนไข `else if` อีกอย่างน้อย 1 ชนิดด้วยตัวเอง โดยเลือกจาก `DioExceptionType.receiveTimeout` หรือ `DioExceptionType.connectionError` (ห้ามซ้ำกับ `badResponse` ที่ให้เป็นตัวอย่างแล้ว) พร้อมข้อความแจ้งเตือนภาษาไทยที่เหมาะสมกับสาเหตุนั้นโดยเฉพาะ (ค้นคว้าความหมายของแต่ละชนิดได้จากเอกสารของแพ็กเกจ `dio` บน pub.dev)
@@ -575,13 +570,48 @@ Future<Weather> fetchWeatherWithDio(String city) async {
 > ✅ **Checkpoint 5.2** เปรียบเทียบสั้น ๆ ระหว่าง `http` กับ `dio` อย่างน้อย 3 ประเด็น โดยอ้างอิงจากสิ่งที่สังเกตได้จริงตอนทดลองในขั้นตอนที่ 5.3 เช่น การแปลง JSON อัตโนมัติ, การกำหนด Query Parameters, และรูปแบบการจัดการ Exception (`DioException` เทียบกับการดักจับหลายชนิดแยกกันแบบ `http`)
 
 ```text
-บันทึกคำตอบที่นี่
+จากการทดลองเรียก OpenWeather API ด้วยทั้ง http (ขั้นตอนที่ 2.3) และ dio 
+(ขั้นตอนที่ 5.3) พบความแตกต่างที่สังเกตได้จริง 3 ประเด็น ดังนี้
+
+1. การแปลง JSON
+   http ต้องเรียก jsonDecode(response.body) เอง ก่อนจะได้ Map<String, dynamic> 
+   มาใช้งานต่อได้ ส่วน dio แปลงให้อัตโนมัติผ่าน response.data ซึ่งเป็น Map 
+   พร้อมใช้งานทันที ไม่ต้องเรียก jsonDecode เพิ่ม ลดโค้ดไปหนึ่งขั้นตอน
+
+2. การกำหนด Query Parameters
+   http ต้องต่อ string URL เอง เช่น 
+   '$_baseUrl?q=$city&appid=$_apiKey&units=metric&lang=th' 
+   ซึ่งเสี่ยงพิมพ์ผิดหรือลืม encode อักขระพิเศษ ส่วน dio ใช้พารามิเตอร์ 
+   queryParameters เป็น Map แยกออกจาก URL หลัก เช่น 
+   {'q': city, 'appid': key, 'units': 'metric'} อ่านง่ายกว่าและ dio 
+   จัดการ URL-encode ให้อัตโนมัติ
+
+3. การจัดการ Exception
+   http ต้องดักจับ Exception หลายชนิดแยกกันตามแหล่งที่มา คือ TimeoutException, 
+   http.ClientException และ FormatException ส่วน dio รวบทุกอย่างไว้ใน 
+   DioException ตัวเดียว แล้วแยกย่อยด้วย e.type (enum DioExceptionType เช่น 
+   connectionTimeout, badResponse, receiveTimeout, connectionError) 
+   ทำให้จัดการที่จุดเดียวได้ครบทุกกรณี แต่ต้องศึกษา enum ทั้งหมดก่อน 
+   ถึงจะดักจับได้ครบถ้วน
 ```
 >
 > ✅ **Checkpoint 5.3** แสดงโค้ดเงื่อนไข `DioExceptionType` เพิ่มเติมที่เขียนเองในขั้นตอนที่ 5.4 
 
 ```text
-บันทึกคำตอบที่นี่
+} on DioException catch (e) {
+  if (e.type == DioExceptionType.connectionTimeout) {
+    throw Exception('การเชื่อมต่อหมดเวลา กรุณาลองใหม่อีกครั้ง');
+  } else if (e.type == DioExceptionType.badResponse) {
+    throw Exception('เซิร์ฟเวอร์ตอบกลับผิดพลาด (${e.response?.statusCode})');
+  } else if (e.type == DioExceptionType.receiveTimeout) {
+    // เชื่อมต่อกับเซิร์ฟเวอร์ได้แล้ว แต่รอรับข้อมูลนานเกินเวลาที่กำหนด
+    throw Exception('เซิร์ฟเวอร์ตอบสนองช้าเกินไป กรุณาลองใหม่อีกครั้ง');
+  } else if (e.type == DioExceptionType.connectionError) {
+    // เชื่อมต่อกับเซิร์ฟเวอร์ไม่ได้เลยตั้งแต่แรก เช่น ไม่มีอินเทอร์เน็ต
+    throw Exception('ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้ กรุณาตรวจสอบการเชื่อมต่อ');
+  }
+  throw Exception('เกิดข้อผิดพลาด: ${e.message}');
+}
 ```
 ---
 
